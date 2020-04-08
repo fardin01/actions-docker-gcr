@@ -5,9 +5,20 @@ set -e
 : ${GCLOUD_REGISTRY:=eu.gcr.io/tradeshift-base}
 : ${IMAGE:=$GITHUB_REPOSITORY}
 : ${ARGS:=} # Default: empty build args
-: ${TAG:=$GITHUB_SHA}
+: ${TAG:=}
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=true}
+
+if [ -z "$TAG" ]
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  if [ "$BRANCH" = "master" ]; then
+      TAG=$(git rev-parse HEAD)
+  else
+      # Assume not master means we are on a branch with that wierd github merge commit
+      TAG=$(git rev-parse HEAD^)
+  fi
+fi
+
 echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG"
 docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG .
 
