@@ -5,9 +5,10 @@ set -e
 : ${GCLOUD_REGISTRY:=eu.gcr.io/tradeshift-base}
 : ${IMAGE:=$GITHUB_REPOSITORY}
 : ${ARGS:=} # Default: empty build args
-: ${TAG:=$GITHUB_SHA}
+: ${TAG:=$(git rev-parse ${GITHUB_REF})}
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=true}
+
 echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG"
 docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG .
 
