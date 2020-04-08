@@ -24,3 +24,6 @@ docker push $GCLOUD_REGISTRY/$IMAGE:$TAG
 if [ $LATEST = true ]; then
   docker push $GCLOUD_REGISTRY/$IMAGE:latest
 fi
+
+
+docker push $GCLOUD_REGISTRY/$IMAGE:${{ github.event.pull_request.head.sha }}

@@ -21,3 +21,5 @@ if [ "$DEFAULT_BRANCH_TAG" = "true" ]; then
     docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:$BRANCH
   fi
 fi
+
+docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:${{ github.event.pull_request.head.sha }}
