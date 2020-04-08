@@ -4,7 +4,7 @@ set -e
 
 : ${GCLOUD_REGISTRY:=eu.gcr.io/tradeshift-base}
 : ${IMAGE:=$GITHUB_REPOSITORY}
-: ${TAG:=$GITHUB_SHA}
+: ${TAG:=$(git rev-parse ${GITHUB_REF})}
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=true}
 
@@ -24,3 +24,4 @@ docker push $GCLOUD_REGISTRY/$IMAGE:$TAG
 if [ $LATEST = true ]; then
   docker push $GCLOUD_REGISTRY/$IMAGE:latest
 fi
+
