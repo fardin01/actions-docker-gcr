@@ -17,6 +17,8 @@ else
   echo "GCLOUD_SERVICE_ACCOUNT_KEY was empty, not performing auth" 1>&2
 fi
 
+echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$TAG"
+echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$GITHUB_SHA"
 docker push $GCLOUD_REGISTRY/$IMAGE:$TAG
 
 if [ $LATEST = true ]; then
