@@ -1,4 +1,4 @@
-FROM google/cloud-sdk:232.0.0
+FROM google/cloud-sdk:slim
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
