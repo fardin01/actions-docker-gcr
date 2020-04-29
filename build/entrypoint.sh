@@ -2,7 +2,7 @@
 
 set -e
 
-: ${GCLOUD_REGISTRY:=eu.gcr.io/tradeshift-base}
+: ${GCLOUD_REGISTRY:=eu.gcr.io}
 : ${IMAGE:=$GITHUB_REPOSITORY}
 : ${ARGS:=} # Default: empty build args
 : ${TAG:=$GITHUB_SHA}
