@@ -8,8 +8,9 @@ set -e
 : ${TAG:=$GITHUB_SHA}
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=true}
-echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG"
-docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG .
+: ${WORKDIR:=.}
+echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG in $WORKDIR"
+docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG $WORKDIR
 
 if [ $LATEST = true ]; then
   docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:latest
