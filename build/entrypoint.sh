@@ -9,6 +9,17 @@ set -e
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=true}
 : ${WORKDIR:=.}
+
+
+if [ -n "${GCLOUD_SERVICE_ACCOUNT_KEY}" ]; then
+  echo "Logging into gcr.io with GCLOUD_SERVICE_ACCOUNT_KEY..."
+  echo ${GCLOUD_SERVICE_ACCOUNT_KEY} | base64 -d > /tmp/key.json
+  gcloud auth activate-service-account --quiet --key-file /tmp/key.json
+  gcloud auth configure-docker --quiet
+else
+  echo "GCLOUD_SERVICE_ACCOUNT_KEY was empty, not performing auth" 1>&2
+fi
+
 echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG in $WORKDIR"
 docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG $WORKDIR
 
