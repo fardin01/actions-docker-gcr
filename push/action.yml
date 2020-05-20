@@ -3,7 +3,7 @@ description: 'Build docker images that can be uploaded to gcr.io'
 author: 'Soren Mathiasen'
 runs:
   using: 'docker'
-  image: 'docker://eu.gcr.io/tradeshift-public/gcr-docker-push:1.0.1'
+  image: 'docker://eu.gcr.io/tradeshift-public/gcr-docker-push:1.0.2'
 branding:
   icon: 'check-square'
   color: 'blue'

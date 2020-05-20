@@ -23,6 +23,8 @@ fi
 echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG in $WORKDIR"
 docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG $WORKDIR
 
+# Always tag with the sha
+docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:${GITHUB_SHA}
 if [ $LATEST = true ]; then
   docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:latest
 fi
