@@ -20,7 +20,7 @@ fi
 echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$TAG"
 echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$GITHUB_SHA"
 docker push $GCLOUD_REGISTRY/$IMAGE:$TAG
-
+docker push $GCLOUD_REGISTRY/$IMAGE:$GITHUB_SHA
 if [ $LATEST = true ]; then
   docker push $GCLOUD_REGISTRY/$IMAGE:latest
 fi
