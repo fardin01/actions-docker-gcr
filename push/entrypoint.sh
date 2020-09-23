@@ -8,19 +8,29 @@ set -e
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=true}
 
+# Sometimes Github runs on a merge commit
+REAL_HEAD=$(git rev-parse HEAD)
+
 if [ -n "${GCLOUD_SERVICE_ACCOUNT_KEY}" ]; then
-  echo "Logging into gcr.io with GCLOUD_SERVICE_ACCOUNT_KEY..."
-  echo ${GCLOUD_SERVICE_ACCOUNT_KEY} | base64 -d > /tmp/key.json
-  gcloud auth activate-service-account --quiet --key-file /tmp/key.json
-  gcloud auth configure-docker --quiet
+    echo "Logging into gcr.io with GCLOUD_SERVICE_ACCOUNT_KEY..."
+    echo ${GCLOUD_SERVICE_ACCOUNT_KEY} | base64 -d > /tmp/key.json
+    gcloud auth activate-service-account --quiet --key-file /tmp/key.json
+    gcloud auth configure-docker --quiet
 else
-  echo "GCLOUD_SERVICE_ACCOUNT_KEY was empty, not performing auth" 1>&2
+    echo "GCLOUD_SERVICE_ACCOUNT_KEY was empty, not performing auth" 1>&2
 fi
 
 echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$TAG"
-echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$GITHUB_SHA"
 docker push $GCLOUD_REGISTRY/$IMAGE:$TAG
+
+echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$GITHUB_SHA"
 docker push $GCLOUD_REGISTRY/$IMAGE:$GITHUB_SHA
+
+echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$REAL_HEAD"
+# And always with the real sha, somtimes this is the same then this would be a noop
+docker push $GCLOUD_REGISTRY/$IMAGE:${REAL_HEAD}
+
 if [ $LATEST = true ]; then
-  docker push $GCLOUD_REGISTRY/$IMAGE:latest
+    echo "Pushing $GCLOUD_REGISTRY/$IMAGE:latest"
+    docker push $GCLOUD_REGISTRY/$IMAGE:latest
 fi
