@@ -11,6 +11,9 @@ set -e
 : ${WORKDIR:=.}
 
 
+# Sometimes Github runs on a merge commit
+REAL_HEAD=$(git rev-parse HEAD)
+
 if [ -n "${GCLOUD_SERVICE_ACCOUNT_KEY}" ]; then
   echo "Logging into gcr.io with GCLOUD_SERVICE_ACCOUNT_KEY..."
   echo ${GCLOUD_SERVICE_ACCOUNT_KEY} | base64 -d > /tmp/key.json
@@ -24,7 +27,13 @@ echo "Building $GCLOUD_REGISTRY/$IMAGE:$TAG in $WORKDIR"
 docker build $ARGS -t $GCLOUD_REGISTRY/$IMAGE:$TAG $WORKDIR
 
 # Always tag with the sha
+echo "Tagging with GITHUB_SHA $GCLOUD_REGISTRY/$IMAGE:${GITHUB_SHA}"
 docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:${GITHUB_SHA}
+
+echo "Tagging with REAL_HEAD $GCLOUD_REGISTRY/$IMAGE:${REAL_HEAD}"
+# And always with the real sha, somtimes this is the same then this would be a noop
+docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:${REAL_HEAD}
+
 if [ $LATEST = true ]; then
   docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:latest
 fi
