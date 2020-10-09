@@ -6,7 +6,7 @@ set -e
 : ${IMAGE:=$GITHUB_REPOSITORY}
 : ${TAG:=$GITHUB_SHA}
 : ${DEFAULT_BRANCH_TAG:=true}
-: ${LATEST:=true}
+: ${LATEST:=false}
 
 # Sometimes Github runs on a merge commit
 REAL_HEAD=$(git rev-parse HEAD)
