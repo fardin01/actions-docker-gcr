@@ -7,7 +7,7 @@ set -e
 : ${ARGS:=} # Default: empty build args
 : ${TAG:=$GITHUB_SHA}
 : ${DEFAULT_BRANCH_TAG:=true}
-: ${LATEST:=true}
+: ${LATEST:=false}
 : ${WORKDIR:=.}
 
 
