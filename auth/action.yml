@@ -1,0 +1,25 @@
+name: "Docker authentication against GCR"
+description: "Authenticates runners docker client against GCR"
+author: "Pavel Gonchukov"
+inputs:
+  gcr-service-account-key:
+    description: "Service account key in base64 encoding"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - id: GCR authentication
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.gcr-service-account-key }}" ]; then
+            echo "Logging into gcr.io with GCLOUD_SERVICE_ACCOUNT_KEY..."
+            echo ${{ inputs.gcr-service-account-key }} | base64 -d > /tmp/key.json
+            gcloud auth activate-service-account --quiet --key-file /tmp/key.json
+            gcloud auth configure-docker --quiet
+        else
+            echo "gcr-service-account-key was empty, not performing auth" 1>&2
+            exit 1
+        fi
+branding:
+  icon: "check-square"
+  color: "blue"

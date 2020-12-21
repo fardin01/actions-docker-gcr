@@ -77,3 +77,12 @@ jobs:
           GCLOUD_REGISTRY: eu.gcr.io
           GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
 ```
+
+### Authenticate docker client of the GH runner
+
+```yaml
+  [...]
+  steps:
+    - name: Authenticate local docker client agains GCR
+      uses: tradeshift/actions-docker-gcr/auth@master
+```
