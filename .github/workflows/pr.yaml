@@ -1,0 +1,49 @@
+name: sonarcube action pr
+on: [pull_request]
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+        - uses: actions/checkout@v2
+
+        - name: Authenticate local docker client agains GCR
+          uses: tradeshift/actions-docker-gcr/auth@master
+          with:
+            gcr-service-account-key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+
+        - name: build
+          run: |
+            docker build -f ./build/Dockerfile eu.gcr.io/tradeshift-public/gcr-docker-builder:${GITHUB_SHA} ./build
+            docker push eu.gcr.io/tradeshift-public/gcr-docker-builder:${GITHUB_SHA}
+
+        # - name: Docker Build build
+        #   uses: tradeshift/actions-docker-gcr/build@master
+        #   env:
+        #     WORKDIR: ./build
+        #     GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+        #     IMAGE: gcr-docker-builder
+        #
+        # - name: Docker Build push
+        #   uses: tradeshift/actions-docker-gcr/build@master
+        #   env:
+        #     WORKDIR: ./push
+        #     GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+        #     IMAGE: gcr-docker-push
+        #
+        # - name: Docker Push build
+        #   uses: tradeshift/actions-docker-gcr/push@master
+        #   env:
+        #     GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+        #     GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+        #     IMAGE: gcr-docker-builder
+        #
+        # - name: Docker Push push
+        #   uses: tradeshift/actions-docker-gcr/push@master
+        #   env:
+        #     GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+        #     GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+        #     IMAGE: gcr-docker-push

@@ -7,6 +7,7 @@ set -e
 : ${TAG:=$GITHUB_SHA}
 : ${DEFAULT_BRANCH_TAG:=true}
 : ${LATEST:=false}
+: ${TAGS:=""}
 
 # Sometimes Github runs on a merge commit
 REAL_HEAD=$(git rev-parse HEAD)
@@ -34,3 +35,10 @@ if [ $LATEST = true ]; then
     echo "Pushing $GCLOUD_REGISTRY/$IMAGE:latest"
     docker push $GCLOUD_REGISTRY/$IMAGE:latest
 fi
+
+for other_tag in $TAGS
+do
+  echo "Pushing $GCLOUD_REGISTRY/$IMAGE:$other_tag"
+  docker tag $GCLOUD_REGISTRY/$IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:$other_tag
+  docker push $GCLOUD_REGISTRY/$IMAGE:$other_tag
+done

@@ -1,0 +1,44 @@
+name: sonarcube action pr
+on:
+  push:
+    branches:
+      - master
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+        - uses: actions/checkout@v2
+
+        - name: Docker Build builder
+          uses: tradeshift/actions-docker-gcr/build@master
+          env:
+            WORKDIR: ./build
+            GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+            IMAGE: gcr-docker-builder
+
+        - name: Docker Build
+          uses: tradeshift/actions-docker-gcr/build@master
+          env:
+            WORKDIR: ./push
+            GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+            IMAGE: gcr-docker-push
+
+        - name: Docker Push build
+          uses: tradeshift/actions-docker-gcr/push@master
+          env:
+            GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+            IMAGE: gcr-docker-builder
+            GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+            TAGS: "v2"
+
+        - name: Docker Push push
+          uses: tradeshift/actions-docker-gcr/push@master
+          env:
+            GCLOUD_REGISTRY: eu.gcr.io/tradeshift-public
+            IMAGE: gcr-docker-push
+            GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+            TAGS: "v2"

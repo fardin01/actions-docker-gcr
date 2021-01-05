@@ -1,9 +1,9 @@
-name: 'GCR Docker builder'
-description: 'Build docker images that can be uploaded to gcr.io'
-author: 'Soren Mathiasen'
+name: "GCR Docker builder"
+description: "Build docker images that can be uploaded to gcr.io"
+author: "Soren Mathiasen"
 runs:
-  using: 'docker'
-  image: 'docker://eu.gcr.io/tradeshift-public/gcr-docker-builder:1.0.2'
+  using: "docker"
+  image: "docker://eu.gcr.io/tradeshift-public/gcr-docker-builder:v2"
 branding:
-  icon: 'check-square'
-  color: 'blue'
+  icon: "check-square"
+  color: "blue"

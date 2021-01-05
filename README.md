@@ -49,12 +49,13 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Docker Build
-        uses: benjlevesque/actions-docker-gcr/build@master
+        uses: tradeshift/actions-docker-gcr/build@master
 
       - name: Docker Push
-        uses: benjlevesque/actions-docker-gcr/push@master
+        uses: tradeshift/actions-docker-gcr/push@master
         env:
           GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+          TAGS: "master stable my-super-custom-tag"
 ```
 
 ### Specify a different Registry, Project & image name
@@ -65,13 +66,13 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Docker Build
-        uses: benjlevesque/actions-docker-gcr/build@master
+        uses: tradeshift/actions-docker-gcr/build@master
         env:
           IMAGE: my-project/my-image
           GCLOUD_REGISTRY: eu.gcr.io
 
       - name: Docker Push
-        uses: benjlevesque/actions-docker-gcr/push@master
+        uses: tradeshift/actions-docker-gcr/push@master
         env:
           IMAGE: my-project/my-image
           GCLOUD_REGISTRY: eu.gcr.io
